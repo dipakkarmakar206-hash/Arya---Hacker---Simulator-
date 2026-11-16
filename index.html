@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARYA | Hacker Simulator</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#020806;color:#00ff88;
+ font-family:Consolas,monospace;min-height:100vh;
+ overflow-x:hidden
+}
+canvas{position:fixed;inset:0;z-index:-1;opacity:.24}
+.wrap{width:min(900px,92%);margin:35px auto}
+header{text-align:center;margin-bottom:25px}
+h1{font-size:clamp(32px,8vw,58px);letter-spacing:5px;
+ text-shadow:0 0 18px #00ff88;margin:12px 0}
+.sub{color:#80ffc0;letter-spacing:3px;font-size:12px}
+.panel{
+ background:rgba(0,15,9,.92);border:1px solid #00bb66;
+ box-shadow:0 0 22px #00aa5540;border-radius:12px;
+ padding:18px;margin:15px 0
+}
+.status{display:flex;justify-content:space-between;gap:10px;
+ flex-wrap:wrap;color:#9affc6;font-size:12px}
+.dot{color:#00ff88}
+h2{font-size:16px}
+input{
+ width:100%;padding:14px;background:#00150c;
+ border:1px solid #008844;color:#00ff88;
+ border-radius:6px;font:inherit;outline:none
+}
+button{
+ padding:12px 16px;background:#00dd77;color:#001b0d;
+ border:0;border-radius:5px;font-weight:bold;
+ font-family:inherit;cursor:pointer;margin:8px 5px 0 0
+}
+button.secondary{background:#07351f;color:#8dffc1;border:1px solid #00aa55}
+#terminal{
+ height:300px;overflow:auto;background:#000;
+ border:1px solid #07552e;padding:14px;
+ border-radius:7px;line-height:1.7;font-size:13px;
+ white-space:pre-wrap;overflow-wrap:anywhere
+}
+.green{color:#00ff88}.dim{color:#65a987}
+footer{text-align:center;color:#4d9972;font-size:11px;padding:25px}
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+<div class="wrap">
+<header>
+ <div class="sub">WELCOME TO THE DIGITAL WORLD</div>
+ <h1>ARYA<span style="color:white">_</span>AI</h1>
+ <div class="sub">HACKER SIMULATOR // VERSION 1.0</div>
+</header>
+
+<div class="panel">
+ <div class="status">
+  <span><span class="dot">●</span> SYSTEM ONLINE</span>
+  <span>MODE: SIMULATION ONLY</span>
+  <span id="clock">00:00:00</span>
+ </div>
+</div>
+
+<div class="panel">
+ <h2>⌁ USER IDENTIFICATION</h2>
+ <p class="dim">Enter your nickname to begin the simulation.</p>
+ <input id="username" maxlength="20" placeholder="Enter your name...">
+ <button onclick="startSim()">▶ START SIMULATION</button>
+ <button class="secondary" onclick="stopSim()">■ STOP</button>
+ <button class="secondary" onclick="clearTerminal()">⌫ CLEAR</button>
+</div>
+
+<div class="panel">
+ <div class="status"><span>◈ TERMINAL</span><span>ENCRYPTED DISPLAY</span></div>
+ <div id="terminal">ARYA TERMINAL v1.0
+------------------------------
+Welcome, user.
+This is a fictional hacker simulator.
+Press START SIMULATION to begin.
+<span class="green">_</span></div>
+</div>
+
+<div class="panel">
+ <h2>◈ SYSTEM INFORMATION</h2>
+ <p class="dim">SYSTEM STATUS: <span class="green">SECURE</span></p>
+ <p class="dim">NETWORK: <span class="green">SIMULATED</span></p>
+ <p class="dim">SECURITY: <span class="green">DEMO MODE</span></p>
+</div>
+
+<footer>MADE WITH ♥ BY ARYA | FOR ENTERTAINMENT ONLY</footer>
+</div>
+
+<script>
+const terminal=document.getElementById("terminal");
+let timer=null;
+const messages=[
+"[ OK ] Initializing virtual terminal...",
+"[ OK ] Loading digital interface...",
+"[ OK ] Checking simulated system status...",
+"[ OK ] Establishing demo connection...",
+"[ INFO ] Scanning imaginary network...",
+"[ OK ] No real devices are being accessed.",
+"[ SUCCESS ] SIMULATION COMPLETE!",
+"[ SECURE ] All systems are safe."
+];
+function line(text){
+ terminal.innerHTML += "\n<span class='green'>"+text+"</span>";
+ terminal.scrollTop=terminal.scrollHeight;
+}
+function startSim(){
+ stopSim();
+ const name=document.getElementById("username").value.trim()||"GUEST";
+ terminal.textContent="ARYA TERMINAL v1.0\n------------------------------";
+ line("Welcome, "+name+"!");
+ line("Starting fictional simulation...");
+ let i=0;
+ timer=setInterval(()=>{
+  if(i<messages.length){line(messages[i]);i++}
+  else{stopSim();line(">> Ready for another demo.")}
+ },850);
+}
+function stopSim(){
+ if(timer){clearInterval(timer);timer=null}
+}
+function clearTerminal(){
+ stopSim();
+ terminal.textContent="ARYA TERMINAL v1.0\n------------------------------\nTerminal cleared.\n";
+}
+function updateClock(){
+ document.getElementById("clock").textContent=
+ new Date().toLocaleTimeString();
+}
+setInterval(updateClock,1000);updateClock();
+
+// Decorative Matrix-style background animation
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+let drops=[];
+function resize(){
+ canvas.width=innerWidth;canvas.height=innerHeight;
+ drops=Array(Math.floor(canvas.width/16)).fill(1);
+}
+resize();addEventListener("resize",resize);
+setInterval(()=>{
+ ctx.fillStyle="rgba(0,0,0,0.08)";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="#00ff77";ctx.font="14px monospace";
+ drops.forEach((y,i)=>{
+  ctx.fillText(Math.random()>.5?"1":"0",i*16,y*16);
+  if(y*16>canvas.height&&Math.random()>.975)drops[i]=0;
+  drops[i]++;
+ });
+},55);
+</script>
+</body>
+  </html>
+  
